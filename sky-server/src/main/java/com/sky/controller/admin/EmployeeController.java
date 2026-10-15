@@ -89,7 +89,9 @@ public class EmployeeController {
     @GetMapping("/page")
     @ApiOperation(value = "分页查询员工")
     public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO) {
-        return Result.success(employeeService.page(employeePageQueryDTO));
+        PageResult pageResult = employeeService.page(employeePageQueryDTO);
+        log.info("分页查询员工：{}", pageResult);
+        return Result.success(pageResult);
     }
 
     @PostMapping("/status/{status}")
@@ -97,6 +99,22 @@ public class EmployeeController {
     public Result<String> status(@PathVariable Integer status,Long id) {
         log.info("修改员工状态：{}，{}", status, id);
         employeeService.updateStatus(status, id);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation(value = "根据id查询员工")
+    public Result<Employee> getById(@PathVariable Long id) {
+        log.info("根据id查询员工：{}", id);
+        Employee employee = employeeService.getById(id);
+        return Result.success(employee);
+    }
+
+    @PutMapping
+    @ApiOperation(value = "修改员工")
+    public Result<String> update(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("修改员工：{}", employeeDTO);
+        employeeService.update(employeeDTO);
         return Result.success();
     }
 }
